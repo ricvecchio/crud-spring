@@ -1,5 +1,6 @@
 package com.transportadora.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,7 +16,15 @@ public class Pedido {
     private String nome;
 
     @Column(nullable = false)
-    private String endereco;
+    private String cpf;
+
+//    @Column(nullable = false)
+//    private String endereco;
+    @Column(nullable = false)
+    private String logradouro;
+
+    @Column(length = 10, nullable = false)
+    private String volume;
 
     @Column(length = 10, nullable = false)
     private String mangueira;
@@ -23,12 +32,11 @@ public class Pedido {
     @Column(length = 20, nullable = false)
     private String valor;
 
+    @Column(length = 20)
+    private String status;
+
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNome() {
@@ -39,12 +47,36 @@ public class Pedido {
         this.nome = nome;
     }
 
-    public String getEndereco() {
-        return endereco;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+//    public String getEndereco() {
+//        return endereco;
+//    }
+//
+//    public void setEndereco(String endereco) {
+//        this.endereco = endereco;
+//    }
+
+    public String getLogradouro() {
+        return logradouro;
+    }
+
+    public void setLogradouro(String logradouro) {
+        this.logradouro = logradouro;
+    }
+
+    public String getVolume() {
+        return volume;
+    }
+
+    public void setVolume(String volume) {
+        this.volume = volume;
     }
 
     public String getMangueira() {
@@ -70,8 +102,5 @@ public class Pedido {
     public void setStatus(String status) {
         this.status = status;
     }
-
-    @Column(length = 20)
-    private String status;
 
 }

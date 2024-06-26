@@ -21,7 +21,10 @@ public class CrudSpringApplication {
 
 			Pedido p = new Pedido();
 			p.setNome("Ricardo Teste inclusão JPA");
-			p.setEndereco("Rua Quinze de Setembro, 50");
+            p.setCpf("322.444.111-98");
+//			p.setEndereco("Rua Quinze de Setembro, 50");
+			p.setLogradouro("Rua Quinze de Setembro, 50");
+			p.setVolume("lav-5m³");
 			p.setMangueira("30 metros");
 			p.setValor("R$ 150,00");
 			p.setStatus("Em Aberto");
