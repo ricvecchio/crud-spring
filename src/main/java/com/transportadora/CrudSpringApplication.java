@@ -29,7 +29,6 @@ public class CrudSpringApplication {
 			p.setValor("R$ 150,00");
 			p.setStatus("Em Aberto");
 
-
 			pedidoRepository.save(p);
 
 		};
