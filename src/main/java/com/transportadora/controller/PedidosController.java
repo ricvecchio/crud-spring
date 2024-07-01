@@ -2,14 +2,19 @@ package com.transportadora.controller;
 
 import com.transportadora.model.Pedido;
 import com.transportadora.repository.PedidoRepository;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/api/pedidos")
 @AllArgsConstructor
@@ -23,7 +28,7 @@ public class PedidosController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pedido> findById(@PathVariable Long id) {
+    public ResponseEntity<Pedido> findById(@PathVariable @NotNull @Positive Long id) {
         return pedidoRepository.findById(id)
                 .map(recordFound -> ResponseEntity.ok().body(recordFound))
                 .orElse(ResponseEntity.notFound().build());
@@ -31,14 +36,12 @@ public class PedidosController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Pedido create(@RequestBody Pedido pedido) {
+    public Pedido create(@RequestBody @Valid Pedido pedido) {
         return pedidoRepository.save(pedido);
-//        return ResponseEntity.status(HttpStatus.CREATED)
-//                .body(pedidoRepository.save(pedido));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Pedido> update(@PathVariable Long id, @RequestBody Pedido pedido){
+    public ResponseEntity<Pedido> update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Pedido pedido){
         return pedidoRepository.findById(id)
                 .map(recordFound -> {
                     recordFound.setNome(pedido.getNome());
@@ -50,7 +53,7 @@ public class PedidosController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable @NotNull @Positive Long id) {
         return pedidoRepository.findById(id)
                 .map(recordFound -> {
                     pedidoRepository.deleteById(id);
@@ -58,18 +61,5 @@ public class PedidosController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
-
-
-//    @PutMapping("/{id}")
-//    public CourseDTO update(@PathVariable @NotNull @Positive Long id,
-//                            @RequestBody @Valid @NotNull CourseDTO course) {
-//        return courseService.update(id, course);
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    @ResponseStatus(code = HttpStatus.NO_CONTENT)
-//    public void delete(@PathVariable @NotNull @Positive Long id) {
-//        courseService.delete(id);
-//    }
 
 }
