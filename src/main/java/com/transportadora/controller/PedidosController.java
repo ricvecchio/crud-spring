@@ -1,65 +1,53 @@
 package com.transportadora.controller;
 
 import com.transportadora.model.Pedido;
-import com.transportadora.repository.PedidoRepository;
+import com.transportadora.service.PedidoService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Validated
 @RestController
 @RequestMapping("/api/pedidos")
-@AllArgsConstructor
 public class PedidosController {
 
-    private PedidoRepository pedidoRepository;
+    private final PedidoService pedidoService;
+
+    public PedidosController(PedidoService pedidoService) {
+        this.pedidoService = pedidoService;
+    }
 
     @GetMapping
-    public List<Pedido> list() {
-        return pedidoRepository.findAll();
+    public @ResponseBody List<Pedido> list() {
+        return pedidoService.list();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pedido> findById(@PathVariable @NotNull @Positive Long id) {
-        return pedidoRepository.findById(id)
-                .map(recordFound -> ResponseEntity.ok().body(recordFound))
-                .orElse(ResponseEntity.notFound().build());
+    public Pedido findById(@PathVariable @NotNull @Positive Long id) {
+        return pedidoService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public Pedido create(@RequestBody @Valid Pedido pedido) {
-        return pedidoRepository.save(pedido);
+        return pedidoService.create(pedido);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Pedido> update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Pedido pedido){
-        return pedidoRepository.findById(id)
-                .map(recordFound -> {
-                    recordFound.setNome(pedido.getNome());
-                    recordFound.setCpf(pedido.getCpf());
-                    Pedido updated = pedidoRepository.save(recordFound);
-                    return ResponseEntity.ok().body(updated);
-                })
-                .orElse(ResponseEntity.notFound().build());
+    public Pedido update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Pedido pedido) {
+        return pedidoService.update(id, pedido);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable @NotNull @Positive Long id) {
-        return pedidoRepository.findById(id)
-                .map(recordFound -> {
-                    pedidoRepository.deleteById(id);
-                    return ResponseEntity.noContent().<Void>build();
-                })
-                .orElse(ResponseEntity.notFound().build());
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable @NotNull @Positive Long id) {
+        pedidoService.delete(id);
     }
-
 }

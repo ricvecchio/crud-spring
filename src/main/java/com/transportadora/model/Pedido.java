@@ -21,7 +21,7 @@ public class Pedido {
     @Column(length = 100, nullable = false)
     private String nome;
 
-    @Column(nullable = false)
+    @Column(length = 20, nullable = false)
     private String cpf;
 
 //    @Column(nullable = false)
